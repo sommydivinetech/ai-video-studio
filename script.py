@@ -4,10 +4,10 @@ import requests
 import subprocess
 from huggingface_hub import HfApi
 
-TITLE = """Legend"""
-SCRIPT_TEXT = """in the land of myth."""
-STYLE = """cinematic"""
-JOB_ID = "job_1790797616504"
+TITLE = """Automated Test Video"""
+SCRIPT_TEXT = """This is a quick test of the fully automated AI video generation pipeline. The system is generating this completely autonomously."""
+STYLE = """Cinematic"""
+JOB_ID = "job_1790798229379"
 
 NVIDIA_KEY = "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"
 KIE_AI_KEY = "1cf7c5c2e976e97a12647ed3358b5ec5"
@@ -82,14 +82,33 @@ def main():
     out_file = f"{TITLE.replace(' ', '_')}.mp4"
     subprocess.run(['ffmpeg', '-f', 'concat', '-safe', '0', '-i', 'concat.txt', '-c', 'copy', out_file])
     
-    update_status("RUNNING", "Uploading to Hugging Face...")
-    api = HfApi(token=HF_TOKEN)
-    repo_id = "sommydivinetech/test-video-dataset" 
+    update_status("RUNNING", "Uploading to GitHub...")
+    import base64
     try:
-        api.create_repo(repo_id=repo_id, repo_type="dataset", exist_ok=True)
-        hf_url = f"https://huggingface.co/datasets/{repo_id}/resolve/main/{out_file}"
-        api.upload_file(path_or_fileobj=out_file, path_in_repo=out_file, repo_id=repo_id, repo_type="dataset")
-        update_status("COMPLETED", f"Video generation completed!", hf_url)
+        with open(out_file, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode("utf-8")
+        
+        url = f"https://api.github.com/repos/sommydivinetech/ai-video-studio/contents/{out_file.replace(' ', '_')}"
+        gh_headers = {
+            "Authorization": f"token {os.environ.get('GITHUB_TOKEN', '')}",
+            "Accept": "application/vnd.github.v3+json"
+        }
+        
+        # Check if file exists to get sha
+        r = requests.get(url, headers=gh_headers)
+        payload = {
+            "message": f"Upload {out_file}",
+            "content": encoded,
+            "branch": "main"
+        }
+        if r.status_code == 200:
+            payload["sha"] = r.json()["sha"]
+            
+        r_put = requests.put(url, headers=gh_headers, json=payload)
+        r_put.raise_for_status()
+        
+        final_url = f"https://github.com/sommydivinetech/ai-video-studio/raw/main/{out_file.replace(' ', '_')}"
+        update_status("COMPLETED", f"Video generation completed!", final_url)
     except Exception as e:
         update_status("ERROR", f"Upload failed: {e}")
 
