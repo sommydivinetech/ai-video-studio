@@ -6,12 +6,8 @@ from huggingface_hub import HfApi
 
 print("Starting generation...")
 
-TITLE = """The Legend"""
-SCRIPT_TEXT = """In The Land of Myth.
-At a Time of Magic.
-The Destiny of a great kingdom.
-Rests on the shoulders of a young boy.
-His name Merlin"""
+TITLE = """legend"""
+SCRIPT_TEXT = """in the land of myth."""
 STYLE = """cinematic"""
 
 NVIDIA_KEY = "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"
