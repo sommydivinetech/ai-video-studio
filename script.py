@@ -4,10 +4,10 @@ import requests
 import subprocess
 from huggingface_hub import HfApi
 
-TITLE = """Automated Test Video"""
-SCRIPT_TEXT = """This is a quick test of the fully automated AI video generation pipeline. The system is generating this completely autonomously."""
-STYLE = """Cinematic"""
-JOB_ID = "job_1790796806752"
+TITLE = """Legend"""
+SCRIPT_TEXT = """in the land of myth."""
+STYLE = """cinematic"""
+JOB_ID = "job_1790797616504"
 
 NVIDIA_KEY = "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"
 KIE_AI_KEY = "1cf7c5c2e976e97a12647ed3358b5ec5"
