@@ -7,11 +7,12 @@ from huggingface_hub import HfApi
 TITLE = """Automated Test Video"""
 SCRIPT_TEXT = """This is a quick test of the fully automated AI video generation pipeline. The system is generating this completely autonomously."""
 STYLE = """Cinematic"""
-JOB_ID = "job_1790798229379"
+JOB_ID = "job_1790857478269"
 
 NVIDIA_KEY = "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"
 KIE_AI_KEY = "1cf7c5c2e976e97a12647ed3358b5ec5"
 HF_TOKEN = "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"
+GITHUB_TOKEN = "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"
 
 def update_status(status, message, video_url=""):
     print(f"[{status}] {message}")
@@ -90,7 +91,7 @@ def main():
         
         url = f"https://api.github.com/repos/sommydivinetech/ai-video-studio/contents/{out_file.replace(' ', '_')}"
         gh_headers = {
-            "Authorization": f"token {os.environ.get('GITHUB_TOKEN', '')}",
+            "Authorization": f"token {GITHUB_TOKEN}",
             "Accept": "application/vnd.github.v3+json"
         }
         
